@@ -2,187 +2,67 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Click Masters Agency – Advanced Off Page SEO Test</title>
+<title>Login Demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-body {
-    background-color: #0b1d33; /* Dark Blue */
-    font-family: Arial, sans-serif;
-    color: #ffffff;
-    margin: 0;
-    padding: 0;
-}
-
-.container {
-    max-width: 900px;
-    margin: 40px auto;
-    background: #12294a;
-    padding: 30px;
-    border-radius: 10px;
-}
-
-h1 {
-    text-align: center;
-    color: #ff8c00; /* Orange */
-}
-
-.timer {
-    text-align: right;
-    font-size: 18px;
-    color: #ff8c00;
-    margin-bottom: 10px;
-}
-
-.question {
-    font-size: 20px;
-    margin-bottom: 20px;
-}
-
-.option {
-    background: #1c355e;
-    padding: 12px;
-    border-radius: 6px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.option:hover {
-    background: #ff8c00;
-    color: #000;
-}
-
-.option.selected {
-    background: #ff8c00; /* Orange on click */
-    color: #000;
-    font-weight: bold;
-}
-
-.footer {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 14px;
-    color: #cccccc;
-}
+  *{box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+  body{
+    margin:0;height:100vh;display:flex;align-items:center;justify-content:center;
+    background:#fffc00;
+  }
+  .box{
+    width:320px;background:#fff;border-radius:12px;padding:22px;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);text-align:center
+  }
+  h2{margin:10px 0 18px}
+  input{
+    width:100%;padding:12px;margin-bottom:10px;border-radius:6px;border:1px solid #ddd
+  }
+  button{
+    width:100%;padding:12px;border:none;border-radius:6px;
+    background:#fffc00;font-weight:bold;cursor:pointer
+  }
+  button:hover{background:#f0ed00}
+  .result{
+    margin-top:14px;padding:10px;border-radius:6px;background:#f5f5f5;
+    text-align:left;font-size:14px;display:none
+  }
+  .note{margin-top:12px;font-size:12px;color:#777}
 </style>
 </head>
 
 <body>
-<div class="container">
-    <h1>Click Masters Agency – Advanced Off Page SEO Test</h1>
-    <div class="timer">Time Left: <span id="time">18</span>s</div>
-    <div class="question" id="question"></div>
-    <div id="options"></div>
-    <div class="footer">
-        Expert Level Off Page SEO | 18 sec per question
-    </div>
-</div>
+  <div class="box">
+    <h2>Login (Demo)</h2>
+
+    <input id="user" type="text" placeholder="Username or Email" required>
+    <input id="pass" type="password" placeholder="Password" required>
+
+    <button onclick="loginDemo()">Login</button>
+
+    <div id="out" class="result"></div>
+    <div class="note">⚠️ Demo only — no data is sent or saved</div>
+  </div>
 
 <script>
-// --------- Original Questions Array ---------
-let quiz = [
-    {q:"Google kis backlink signal ko sab se zyada importance deta hai?", options:["Link Quantity","Exact Match Anchor","Topical Relevance + Authority","Do-follow Tag"], answer:2},
-    {q:"Penguin algorithm ka main focus kis par hota hai?", options:["Content Quality","Technical SEO","Backlink Manipulation","UX"], answer:2},
-    {q:"Contextual backlink kis jagah zyada powerful hota hai?", options:["Footer","Sidebar","In-content body","Profile section"], answer:2},
-    {q:"Agar backlinks bohot fast build hon to Google kya action le sakta hai?", options:["Ranking boost","Manual reward","Algorithmic suppression","Faster indexing"], answer:2},
-    {q:"Anchor text over-optimization ka result kya hota hai?", options:["Ranking boost","Google penalty","Faster crawling","Better UX"], answer:1},
-    {q:"Guest posting ka main faida kya hai?", options:["Free hosting","Backlink + authority","Faster loading","Code optimization"], answer:1},
-    {q:"No-follow link kya hota hai?", options:["Link jo Google follow karta hai","Link jo ranking pass nahi karta","Broken link","Internal link"], answer:1},
-    {q:"Tier-2 backlinks ka main purpose kya hota hai?", options:["Direct ranking boost","Money page ko link dena","Tier-1 links ki authority strengthen karna","Spam create karna"], answer:2},
-    {q:"E-E-A-T ka Off Page SEO me role kya hai?", options:["Keyword density improve karna","Trust & authority signals build karna","Page speed increase","HTML validation"], answer:1},
-    {q:"Digital PR kyun important hai?", options:["Cheap backlinks","Natural authority + brand trust","Keyword stuffing","Automation"], answer:1},
-    {q:"Link dilution ka matlab kya hai?", options:["Multiple backlinks from same page","Authority ka bohot zyada links me divide hona","Keyword overuse","Broken backlinks"], answer:1},
-    {q:"Private Blog Network detect kaise hota hai?", options:["High traffic","Similar themes","Same hosting, IPs & link patterns","Branded anchors"], answer:2},
-    {q:"Toxic backlink kya hai?", options:["High DA link","Relevant link","Spam / harmful link","Editorial link"], answer:2},
-    {q:"Disavow tool ka incorrect use kya kar sakta hai?", options:["Faster ranking","Loss of valuable link equity","Better crawl","Higher CTR"], answer:1},
-    {q:"Backlink velocity ka matlab kya hai?", options:["Website speed","Backlinks bananay ki speed","Keyword ranking speed","Crawling speed"], answer:1},
-    {q:"Brand mention bina link ke kya kehlata hai?", options:["Backlink","Citation","Unlinked brand mention","Redirect"], answer:2},
-    {q:"Safe anchor text ratio kya hota hai?", options:["Mostly exact match","Mostly keyword rich","Mostly branded & generic","Only naked URLs"], answer:2},
-    {q:"Auto-generated profile links ko Google ignore kyun karta hai?", options:["News websites","Editorial blogs","Auto-generated profile links","Authority forums"], answer:2},
-    {q:"Advanced Off Page SEO success ka ultimate factor kya hai?", options:["Total backlinks count","DA increase only","Authority-driven organic growth","Daily submissions"], answer:2},
-    {q:"Competitors ka backlink gap identify karne ka purpose?", options:["Website speed check","Missing backlinks find karna","Keyword stuffing","On-page errors"], answer:1}
-];
+  function maskPassword(p){
+    if(p.length <= 2) return "*".repeat(p.length);
+    return p[0] + "*".repeat(p.length-2) + p[p.length-1];
+  }
 
-// --------- Shuffle Questions Function ---------
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-}
-shuffleArray(quiz); // Randomize questions at start
+  function loginDemo(){
+    const u = document.getElementById("user").value;
+    const p = document.getElementById("pass").value;
 
-// --------- Variables ---------
-let index = 0;
-let score = 0;
-let time = 18;
-let timer;
-
-// --------- Load Question ---------
-function loadQuestion() {
-    clearInterval(timer);
-    time = 18;
-    document.getElementById("time").innerText = time;
-
-    document.getElementById("question").innerText = quiz[index].q;
-    const optionsDiv = document.getElementById("options");
-    optionsDiv.innerHTML = "";
-
-    quiz[index].options.forEach((opt,i)=>{
-        const div = document.createElement("div");
-        div.className="option";
-        div.innerText=opt;
-        div.onclick=()=> selectOption(div,i);
-        optionsDiv.appendChild(div);
-    });
-
-    timer = setInterval(()=>{
-        time--;
-        document.getElementById("time").innerText = time;
-        if(time===0) nextQuestion();
-    },1000);
-}
-
-// --------- Select Option ---------
-function selectOption(el,i){
-    document.querySelectorAll(".option").forEach(o=>o.classList.remove("selected"));
-    el.classList.add("selected");
-
-    // Score calculate
-    if(i===quiz[index].answer) score++;
-
-    setTimeout(nextQuestion,500);
-}
-
-// --------- Next Question ---------
-function nextQuestion(){
-    clearInterval(timer);
-    index++;
-    if(index<quiz.length){
-        loadQuestion();
-    }else{
-        showResult();
-    }
-}
-
-// --------- Show Result ---------
-function showResult(){
-    const container = document.querySelector(".container");
-    const percentage = Math.round((score/quiz.length)*100);
-    const status = (score>=16) ? "PASS ✅ Expert Level" : "FAIL ❌";
-
-    container.innerHTML = `
-        <h1>Test Completed</h1>
-        <p style="text-align:center;font-size:18px;margin-top:20px;">
-        Your Score: ${score} / ${quiz.length} <br>
-        Percentage: ${percentage}% <br>
-        Status: <strong>${status}</strong>
-        </p>
+    const out = document.getElementById("out");
+    out.style.display = "block";
+    out.innerHTML = `
+      <strong>You entered:</strong><br>
+      Username: ${u || "-"}<br>
+      Password: ${maskPassword(p)}
     `;
-}
-
-// --------- Start Test ---------
-loadQuestion();
+  }
 </script>
 </body>
 </html>
-
